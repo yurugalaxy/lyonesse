@@ -28,8 +28,8 @@ namespace Lyonesse
 
     glfwMakeContextCurrent(m_windowPtr);
     glfwSetWindowUserPointer(m_windowPtr, this);
-    glfwSetFramebufferSizeCallback(m_windowPtr, InputHandler::Event::OnResize);
-    glfwSetCursorPosCallback(m_windowPtr, InputHandler::Event::OnMouseMove);
+    glfwSetFramebufferSizeCallback(m_windowPtr, InputHandler::OnResize);
+    glfwSetCursorPosCallback(m_windowPtr, InputHandler::OnMouseMove);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {

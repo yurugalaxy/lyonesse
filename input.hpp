@@ -6,13 +6,12 @@
 
 #include "window.hpp"
 
-namespace Lyonesse::InputHandler
+namespace Lyonesse
 {
-    void HandleInput(Window& window);
-
-    class Event
+    class InputHandler
     {
     public:
+        static void HandleInput(Window& window);
         static void OnMouseMove(GLFWwindow* win, double xPos, double yPos);
         static void OnResize(GLFWwindow* win, int width, int height);
     };

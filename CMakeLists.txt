@@ -15,6 +15,7 @@ set(SOURCES
         ${LIB_PATH}/glad.c
         window.cpp
         input.cpp
+        shader.cpp
 )
 
 set(IMGUI_SOURCES
