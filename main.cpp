@@ -14,155 +14,207 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-struct Vertices
+struct Model
 {
-  std::vector<float> Verts
+  std::vector<GLfloat> Vertices{};
+
+  std::vector<GLfloat> Colours{};
+
+  std::vector<GLfloat> TextureCoords {};
+
+  unsigned long m_vertSize {Vertices.size() * sizeof(GLfloat)};
+  unsigned long m_colourSize {Colours.size() * sizeof(GLfloat)};
+  unsigned long m_TextureSize {TextureCoords.size() * sizeof(GLfloat)};
+};
+
+struct Quad : Model
+{
+  std::vector<GLfloat> Vertices
   {
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    -0.05f, 0.05f, 0.05f,
+    -0.05f,-0.05f,-0.05f,
+    -0.05f, 0.05f, 0.05f,
+    -0.05f, 0.05f, 0.05f
   };
-};
 
-struct Texture
-{
-  std::vector<float> Coords
+  std::vector<GLfloat> Colours
   {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-
-    0.0f, 1.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f,
-    0.0f, 1.0f,
-
-    0.0f, 1.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f,
-    0.0f, 1.0f
+    1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f
   };
+
 };
 
-struct Position3D
+struct Cube : Model
 {
-  float X;
-  float Y;
-  float Z;
+  std::vector<GLfloat> Vertices
+  {
+     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+  };
+
 };
 
-class CubeModel
+Quad baseQuad;
+
+Cube baseCube;
+
+class Entity
 {
 public:
-  Vertices verts;
-  Texture tex;
+  void Init(glm::vec3 offset, int ID)
+  {
+    m_offset = offset;
+    inUse = true;
+    m_ID = ID;
+  }
+
+  ~Entity()
+  {
+    inUse = false;
+    std::cout << "Destroyed entity " << m_ID << ".\n";
+  }
+
+  GLuint ID() { return m_ID; }
+  bool Alive() { return inUse; }
+  glm::vec3 Offset() { return m_offset; }
+  void Kill() { inUse = false; }
+
+private:
+  Model& m_modelRef = baseQuad;
+  glm::vec3 m_offset {0.0f};
+  bool inUse{false};
+  int m_ID;
 };
 
-class Cube
+template<int S>
+class EntityContainer
 {
 public:
-  Cube(CubeModel& mod, Position3D pos)
-    : m_model(mod)
-    , m_pos(pos)
-  {}
-public:
-  CubeModel& m_model;
-  Position3D m_pos {0.0f, 0.0f, 0.0f};
-};
+  void Create(glm::vec3 offset)
+  {
+    for (int i = 0; i < m_entityLimit; ++i)
+    {
+      if (m_entities[i].Alive())
+      {
+        continue;
+      }
 
-std::vector<GLfloat> trias
-{
-  0.5f, 0.5f, 0.0f,
-  0.5f, -0.5f, 0.0f,
-  -0.5f, 0.5f, 0.0f
+      m_entities[i].Init(offset, i);
+      std::cout << "Created entity " << i << ".\n";
+      return;
+    }
+    std::cout << "AWFUL. Ran out of room in handler.\n";
+  }
+
+  void Murder()
+  {
+    for (int i = 0; i < m_entityLimit; ++i)
+    {
+      if (m_entities[i].Alive())
+      {
+        m_entities[i].Kill();
+      }
+    }
+    std::cout << "KILLED ALL ENTITIES. :3\n";
+  }
+
+  void Info()
+  {
+    for (auto& e: m_entities)
+    {
+      std::cout << &e << '\n';
+    }
+    std::cout << '\n';
+  }
+
+  Entity& Ent(int i) { return m_entities[i]; }
+  int EntLimit() { return m_entityLimit; }
+
+private:
+  const int m_entityLimit{S};
+  Entity m_entities[S];
 };
 
 int main()
 {
   Lyonesse::Window window(1920, 1080, "awoo");
 
-  CubeModel cubemod;
-  Cube no1(cubemod, {0.0f, 0.5f, 1.0f});
+  EntityContainer<100> handlerofstuff;
 
-  Lyonesse::Shader vertexShader("../assets/shaders/basic.vert", "../assets/shaders/basic.frag");
-  vertexShader.Use();
+  for (int i = 0; i < 10; ++i)
+  {
+    for (int j = 0; j < 10; ++j)
+    {
+      handlerofstuff.Create(glm::vec3(j * 0.15f - 0.7f, i * 0.15f - 0.7f, 1.0f));
+    }
+  }
 
-  GLuint VBO, VAO;
+  //TODO: It's not rendering after changing offset to a vec3
+  Lyonesse::Shader baseShader("../assets/shaders/instance.vert", "../assets/shaders/instance.frag");
+  baseShader.Use();
+
+  for (int i = 0; i < handlerofstuff.EntLimit(); ++i)
+  {
+    // baseShader.UploadUniformFloat2("offsets[" + std::to_string(i) + "]", LotsofQuads[i].Offset());
+    baseShader.UploadUniformFloat3("offsets[" + std::to_string(i) + ']', handlerofstuff.Ent(i).Offset());
+  }
+
+  GLuint VBOquads, VBOcolour, VAO;
   glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
+  glGenBuffers(1, &VBOquads);
+  glGenBuffers(1, &VBOcolour);
 
   glBindVertexArray(VAO);
 
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, no1.m_model.verts.Verts.size() * sizeof(GLfloat), &no1.m_model.verts.Verts.front(), GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+  glBindBuffer(GL_ARRAY_BUFFER, VBOquads);
+
+  glBufferData(GL_ARRAY_BUFFER, baseQuad.m_vertSize, &baseQuad.Vertices.front(), GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
   glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBOcolour);
+  glBufferData(GL_ARRAY_BUFFER, baseQuad.m_colourSize, &baseQuad.Colours.front(), GL_STATIC_DRAW);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
+  glEnableVertexAttribArray(1);
 
   while (Lyonesse::Window::Active())
   {
@@ -172,7 +224,7 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
 
     glfwSwapBuffers(window.glWindow());
     glfwPollEvents();

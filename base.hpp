@@ -9,6 +9,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "util/random.hpp"
+
 namespace Lyonesse
 {
   template<typename T>
