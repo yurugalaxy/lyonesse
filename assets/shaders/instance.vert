@@ -9,7 +9,7 @@ out vec3 colour;
 
 void main()
 {
-  vec3 offset = offsets[gl_InstanceID];
+  vec3 offset = offsets[1];
   gl_Position = vec4(aPos.x + offset.x, aPos.y + offset.y, 0.0, 1.0);
   colour = aColour;
 }
