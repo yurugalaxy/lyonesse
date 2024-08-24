@@ -16,13 +16,9 @@ set(SOURCES
         window.cpp
         input.cpp
         shader.cpp
-        ecs/entities.cpp
         ecs/entities.hpp
-        ecs/components.cpp
         ecs/components.hpp
-        ecs/systems.cpp
         ecs/systems.hpp
-        ecs/ecs.cpp
         ecs/ecs.hpp
 )
 
@@ -34,7 +30,6 @@ set(IMGUI_SOURCES
         ${IMGUI_PATH}/imgui_impl_opengl3.cpp
         ${IMGUI_PATH}/imgui_tables.cpp
         ${IMGUI_PATH}/imgui_widgets.cpp
-        ecs/entities.cpp
         ecs/entities.hpp
 )
 

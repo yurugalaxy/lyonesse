@@ -17,32 +17,19 @@ int main()
 {
   Lyonesse::Window window(100, 100, "awoo");
 
-  ECS::Scene oofScene;
+  ECS::Scene sceneGame;
 
-  ECS::EntityID wawa = oofScene.NewEntity();
-  ECS::EntityID oops = oofScene.NewEntity();
+  const ECS::EntityID player = sceneGame.NewEntity();
+  const ECS::EntityID enemy = sceneGame.NewEntity();
+  const ECS::ComponentID transformID = ECS::Scene::GetID();
+  const ECS::ComponentID velocityID = ECS::Scene::GetID();
 
+  sceneGame.Assign<ECS::TransformComponent>(player, transformID)->position = {6.1f, 8.2f, 3.8f};
+  sceneGame.Assign<ECS::VelocityComponent>(enemy, velocityID)->velocity = {8.7f, 1.0f, 1.9f};
+  sceneGame.Assign<ECS::TransformComponent>(enemy, transformID)->position = {2.2f, 1.1f, 2.2f};
 
-  oofScene.Assign<ECS::POSITION>(wawa);
-  oofScene.Assign<ECS::SPRITE>(wawa);
-  oofScene.Assign<ECS::POSITION>(oops);
-  oofScene.Assign<ECS::VELOCITY>(oops);
-
-  oofScene.Remove<ECS::VELOCITY>(oops);
-
-  oofScene.Assign<ECS::ENEMY>(oops);
-
-  ECS::EntityID cloney = oofScene.Clone(oops);
-
-  for (auto& e : oofScene.entities)
-  {
-    if (e.m_active == true)
-    {
-      std::cout << e.m_type << ' ' << e.m_entityID << " at: " << &e
-                << ", active: " << std::boolalpha << e.m_active
-                << ", bitset: " << e.m_componentMask << '\n';
-    }
-  }
+  std::cout << "Player active components: " << sceneGame.Ent(player).Mask() << '\n';
+  std::cout << "Enemy active components: " << sceneGame.Ent(enemy).Mask() << '\n';
 
   while (Lyonesse::Window::Active())
   {

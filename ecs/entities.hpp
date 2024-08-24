@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <iostream>
-
 #include "../base.hpp"
 
 namespace ECS
@@ -14,24 +12,22 @@ namespace ECS
   {
     EntityID Init()
     {
-      m_entityID = s_IDGen++;
-      m_active = true;
+      m_entityID = s_EntityID++;
+      std::cout << "Created new entity: " << m_entityID << '\n';
       return m_entityID;
     }
 
-    EntityID Init(const Entity entity)
+    EntityID Clone(const Entity entity)
     {
-      m_entityID = s_IDGen++;
-      m_active = true;
+      m_entityID = s_EntityID++;
       m_componentMask = entity.m_componentMask;
-      m_type = entity.m_type;
       return m_entityID;
     }
+
+    ComponentMask Mask() { return m_componentMask; }
 
     EntityID m_entityID {};
     ComponentMask m_componentMask {};
-    bool m_active {};
-    EntityType m_type {};
   };
 }
 

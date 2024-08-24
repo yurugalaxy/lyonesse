@@ -8,24 +8,23 @@
 
 namespace ECS
 {
-  struct Components
+  struct Component
   {
-    bool active {};
+    virtual ~Component() = default;
   };
 
-  struct PositionComponent
+  struct ComponentPool
   {
-    glm::vec2 position {};
+    Component* data[kEntityLimit] {nullptr};
   };
 
-  struct VelocityComponent
+  struct TransformComponent : Component
   {
-    glm::vec2 velocityComponent {};
+    glm::vec3 position {};
   };
 
-  class ComponentPool
+  struct VelocityComponent : Component
   {
-  public:
-
+    glm::vec3 velocity {};
   };
 }

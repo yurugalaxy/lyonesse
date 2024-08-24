@@ -6,6 +6,8 @@
 
 #include <bitset>
 #include <memory>
+#include <vector>
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -15,28 +17,13 @@
 namespace ECS
 {
   constexpr int kComponentLimit { 4 };
-  constexpr int kEntityLimit { 10 };
-
-  enum ComponentID
-  {
-    POSITION = 0,
-    VELOCITY,
-    SPRITE,
-    MODEL
-  };
-
-  enum EntityType
-  {
-    PLAYER,
-    ENEMY,
-    TILE,
-    PROP,
-    DECORATION,
-  };
+  constexpr int kEntityLimit { 5 };
 
   typedef std::bitset<kComponentLimit> ComponentMask;
   typedef unsigned long long EntityID;
-  static inline EntityID s_IDGen { 0 };
+  typedef unsigned int ComponentID;
+  static inline EntityID s_EntityID { 0 };
+  static inline unsigned int s_ComponentID { 0 };
 }
 
 namespace Lyonesse
@@ -46,5 +33,8 @@ namespace Lyonesse
 
   template<typename T>
   using Unique = std::unique_ptr<T>;
+
+  template<typename T>
+  using Weak = std::weak_ptr<T>;
 
 }
