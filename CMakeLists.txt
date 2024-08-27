@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 link_libraries(GL)
 link_libraries(glfw)
+link_libraries(lua)
 
 set(LIB_PATH ${CMAKE_CURRENT_LIST_DIR}/lib)
 set(IMGUI_PATH ${CMAKE_CURRENT_LIST_DIR}/lib/imgui)
@@ -16,10 +17,12 @@ set(SOURCES
         window.cpp
         input.cpp
         shader.cpp
-        ecs/entities.hpp
-        ecs/components.hpp
-        ecs/systems.hpp
-        ecs/ecs.hpp
+        mesh.cpp
+        renderer_2D.cpp
+        resource_manager.cpp
+        fileio/load_mesh.cpp
+        renderer.cpp
+        ecs/scene.cpp
 )
 
 set(IMGUI_SOURCES

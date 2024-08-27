@@ -7,61 +7,48 @@
 #include "entities.hpp"
 #include "components.hpp"
 #include "../base.hpp"
+#include "../renderer.hpp"
 
 namespace ECS
 {
   class Scene
   {
   public:
-    static ComponentID GetID()
-    {
-      const ComponentID id = s_ComponentID++;
-      return id;
-    }
+    static U16 GetID();
+    U64 NewEntity();
+    U64 Clone(U64 index);
+    void DeleteEntity(U64 entity);
+    Entity GetEntity(const U64 entity) { return m_entities[entity]; }
+    void Remove(U64 entity, U16 componentID);
 
-    EntityID NewEntity()
+    template<typename T>
+    T* GetPool(const U64 entity, const U16 componentID)
     {
-      return m_entities[s_EntityID].Init();
-    }
-
-    EntityID Clone(const EntityID index)
-    {
-      return m_entities[s_EntityID].Clone(m_entities[index]);
-    }
-
-    void DeleteEntity(const EntityID index)
-    {
-      m_entities[index].m_componentMask.reset();
+        return dynamic_cast<T*>(pool[componentID].data[entity]);
     }
 
     template<typename T>
-    T* Assign(const EntityID entity, const ComponentID componentID)
+    T* Assign(const U64 entity, const U16 componentID)
+  {
+    if (pool.size() <= componentID)
     {
-      if (pool.size() <= componentID)
-      {
-        pool.resize(componentID + 1);
-        std::cout << "New component created at index: " << componentID << '\n';
-      }
-
-      if (pool[componentID].data[entity] == nullptr)
-      {
-        pool[componentID].data[entity] = new T;
-        std::cout << "Component instantiated at index : " << componentID << '\n';
-      }
-
-      m_entities[entity].m_componentMask.set(componentID);
-      return dynamic_cast<T*>(pool[componentID].data[entity]);
+      pool.resize(componentID + 1);
+      std::cout << "New component created at index: " << componentID << '\n';
     }
 
-    template<typename T>
-    void Remove(const EntityID entity, const ComponentID componentID)
+    if (pool[componentID].data[entity] == nullptr)
     {
-      m_entities[entity].m_componentMask.reset(componentID);
+      pool[componentID].data[entity] = new T;
+      std::cout << "Existing component instantiated at index : " << componentID << '\n';
     }
 
-    Entity Ent(const EntityID i) { return m_entities[i]; }
+    m_entities[entity].Mask().set(componentID);
+    return dynamic_cast<T*>(pool[componentID].data[entity]);
+  }
 
-  // private:
+    void SetRenderer(Lyonesse::Renderer& renderer);
+
+  private:
     Entity m_entities[kEntityLimit];
     std::vector<ComponentPool> pool;
   };

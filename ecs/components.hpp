@@ -5,6 +5,8 @@
 #pragma once
 
 #include "../base.hpp"
+#include "../mesh.hpp"
+#include "../renderer.hpp"
 
 namespace ECS
 {
@@ -26,5 +28,12 @@ namespace ECS
   struct VelocityComponent : Component
   {
     glm::vec3 velocity {};
+  };
+
+  struct SpriteComponent : Component
+  {
+    Lyonesse::Texture texture {};
+    Lyonesse::Shader shader;
+    Lyonesse::Renderer& renderer;
   };
 }

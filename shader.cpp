@@ -36,7 +36,7 @@ namespace Lyonesse
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 
-    unsigned int vertex, fragment;
+    U16 vertex, fragment;
     int success;
     char infoLog[512];
 

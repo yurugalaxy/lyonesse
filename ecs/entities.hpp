@@ -8,16 +8,17 @@
 
 namespace ECS
 {
-  struct Entity
+  class Entity
   {
-    EntityID Init()
+  public:
+    U64 Init()
     {
       m_entityID = s_EntityID++;
       std::cout << "Created new entity: " << m_entityID << '\n';
       return m_entityID;
     }
 
-    EntityID Clone(const Entity entity)
+    U64 Clone(const Entity entity)
     {
       m_entityID = s_EntityID++;
       m_componentMask = entity.m_componentMask;
@@ -26,7 +27,8 @@ namespace ECS
 
     ComponentMask Mask() { return m_componentMask; }
 
-    EntityID m_entityID {};
+  private:
+    U64 m_entityID {};
     ComponentMask m_componentMask {};
   };
 }

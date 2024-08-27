@@ -3,10 +3,7 @@
   <component name="BackendCodeEditorSettings">
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/CodeStyle/CodeFormatting/CppFormatting/INDENT_SIZE/@EntryValue" value="2" type="long" />
-    <option name="/Default/Environment/InlayHints/CppParameterNameHintsOptions2/ShowParameterNameHints/@EntryValue" value="Always" type="string" />
-    <option name="/Default/Environment/InlayHints/CppParameterNameHintsOptions2/HideIfIntentionOfFirstParameterIsClearFromMethodName/@EntryValue" value="false" type="bool" />
-    <option name="/Default/Environment/InlayHints/CppParameterNameHintsOptions2/HideIfIntentionOfArgumentIsClearFromUsage/@EntryValue" value="false" type="bool" />
-    <option name="/Default/Environment/InlayHints/CppParameterNameHintsOptions2/HideForBuilderLikeMethods/@EntryValue" value="false" type="bool" />
     <option name="/Default/CodeStyle/CodeFormatting/CppFormatting/TAB_WIDTH/@EntryValue" value="2" type="long" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="InlayHintsGeneralOptionsPageId" type="string" />
   </component>
 </project>

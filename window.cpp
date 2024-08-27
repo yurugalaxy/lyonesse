@@ -2,23 +2,29 @@
 
 #include <cassert>
 #include <iostream>
+#include <sol/sol.hpp>
 
 #include "input.hpp"
 
 namespace Lyonesse
 {
-  Window::Window(const float width, const float height, const char* title)
-    : m_title(title)
-    , m_width(width)
-    , m_height(height)
-    , m_aspectRatio(width / height)
+  Window::Window()
   {
+    //Only 1 window allowed at a time
     assert(!s_active);
     s_active = true;
 
-    Initialise();
+    // Get parameters from the config lua
+    sol::state lua;
+    lua.script_file("../scripts/config.lua");
+    m_title = lua.get<sol::table>("Window").get<const char*>("title");
+    m_width = lua["Window"]["resolution"]["width"];
+    m_height = lua["Window"]["resolution"]["height"];
+    m_aspectRatio = m_width / static_cast<float>(m_height);
+    // ------------------------------------
 
-    m_windowPtr = glfwCreateWindow(m_width, m_height, title, nullptr, nullptr);
+    Initialise();
+    m_windowPtr = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
 
     if (m_windowPtr == nullptr)
     {
